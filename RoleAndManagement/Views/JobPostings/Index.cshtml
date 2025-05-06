@@ -1,0 +1,55 @@
+@* @page
+@model RoleAndManagement.Views.JobPostings.Index *@
+
+@model IEnumerable<RoleAndManagement.Models.JobPosting>
+@using RoleAndManagement.Contants
+
+<h1 class="text-center m-5">All Jobs</h1>
+
+<div class="list-group">
+    @foreach(var jobPosting in Model)
+    {
+        <div class="list-group-item" id="job-posting-@jobPosting.Id">
+            <h3>@jobPosting.Title</h3>
+            <p>@jobPosting.Description</p>
+            <p><strong>Company:</strong> @jobPosting.Company</p>
+            <p><strong>Location:</strong> @jobPosting.Location</p>
+            <p><strong>Posted Date:</strong> @jobPosting.PostedDate.ToShortDateString()</p>
+
+            @if(User.IsInRole(Roles.Admin)||User.IsInRole(Roles.Employer))
+            {
+                <div>
+                    <button class="btn btn-sm btn-danger" onclick="deleteJobPosting(@jobPosting.Id)">Delete</button>
+                </div>
+            }
+
+            <a asp-action="DeleteEasy" asp-route-id="@jobPosting.Id">Delete</a>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        function deleteJobPosting(id)
+        {
+            if(confirm("Really to delete?" + id))
+            {
+                //url
+                //type (delete)
+                //success -> visually remove the job posting li
+                //fail -> show an error message
+
+                $.ajax({
+                    url: "@Url.Action("Delete", "JobPostings")/" + id,
+                    type: "delete",
+                    success: function(result) {
+                        $("#job-posting-" - id).remove();
+                    },
+                    error: function(err) {
+                        alert("An error occured.")
+                    }
+                });
+            }
+        }
+    </script>
+}
