@@ -10,6 +10,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RoleAndManagement.Models
 {
+    public enum JobType
+    {
+        Accounting,
+        BankingFinancial,
+        CustomerService,
+        Management,
+        Design,
+        HealthCare,
+        Science,
+        InformationTechnology,
+        Sale,
+        Sport
+    }
     public class JobPosting
     {
         [Key]

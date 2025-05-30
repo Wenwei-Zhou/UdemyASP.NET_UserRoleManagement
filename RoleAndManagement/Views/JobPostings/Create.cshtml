@@ -13,10 +13,28 @@
 @* <form method="post" action="Create"> *@
 <form asp-action="Create" method="post">
 
-<div class="mb-3">
+<div class="hstack gap-5 mb-3">
     <label asp-for="Title" class="form-label"></label>
     <input type="text" asp-for="Title" class="form-control" />
     <span asp-validation-for="Title" class="text-danger"></span>
+
+    <div class="input-group">
+        <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+            <option selected>Classification...</option>
+            <option value="1">Accounting</option>
+            <option value="2">BankingFinancial</option>
+            <option value="3">CustomerService</option>
+            <option value="3">Management</option>
+            <option value="3">Design</option>
+            <option value="3">HealthCare</option>
+            <option value="3">Science</option>
+            <option value="3">InformationTechnology</option>
+            <option value="3">Sale</option>
+            <option value="3">Sport</option>
+        </select>
+
+        <button class="btn btn-outline-secondary" type="button">SEEK</button>
+    </div>
 </div>
 
 <div class="mb-3">

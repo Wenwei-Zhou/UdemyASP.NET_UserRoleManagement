@@ -7,9 +7,19 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+// builder.Services.AddDbContext<ApplicationDbContext>(options =>
+// {
+//     options.UseSqlServer(builder.Configuration.GetConnectionString("RoleManagement"));
+// });
+// Microsoft SQL！！！！！！
+
+builder.Services.Configure<MongoDBContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("RoleManagement"));
+    options.ConnectionString = builder.Configuration.GetConnectionString("mongo");
+    options.DatabaseName = builder.Configuration["MongoDBSettings:DatabaseName"];
+    options.JobCollection = builder.Configuration["MongoDBSettings:JobCollection"];
+    options.AuthicationCollection = builder.Configuration["MongoDBSettings:AuthicationCollection"];
+
 });
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
