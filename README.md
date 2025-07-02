@@ -40,4 +40,5 @@ A full-featured ASP.NET MVC web application that allows users to register, log i
 1. Clone the repository:
    ```bash
    git clone https://github.com/Wenwei-Zhou/UdemyASP.NET_UserRoleManagement.git
-   cd job-posting-mvc
+   
+   cd RoleAndManagement
