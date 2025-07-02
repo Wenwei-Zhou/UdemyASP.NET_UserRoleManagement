@@ -22,7 +22,7 @@ A full-featured ASP.NET MVC web application that allows users to register, log i
 - SQL Server / Azure SQL
 - Identity (role & user management)
 - Razor Views (Bootstrap styled)
-- Visual Studio Code / Docker (optional)
+- Visual Studio Code / Docker
 
 ---
 
@@ -33,11 +33,11 @@ A full-featured ASP.NET MVC web application that allows users to register, log i
 - [.NET 8 SDK](https://dotnet.microsoft.com/)
 - [SQL Server](https://www.microsoft.com/en-us/sql-server/)
 - [Azure Data Studio](https://learn.microsoft.com/en-us/sql/azure-data-studio/)
-- (Optional) Docker if using SQL Server in a container
+- Docker if using SQL Server in a container
 
 ### Setup
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/job-posting-mvc.git
+   git clone https://github.com/Wenwei-Zhou/UdemyASP.NET_UserRoleManagement.git
    cd job-posting-mvc
