@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using RoleAndManagement.Contants;
 using RoleAndManagement.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace RoleAndManagement.Controllers
 {
@@ -28,6 +29,10 @@ namespace RoleAndManagement.Controllers
 
         private readonly IRepository<JobPosting> _repository;
 
+        private readonly User user = new User();
+
+        
+
         public MongoDBJobController(IRepository<JobPosting> repository)
         {
             _repository = repository;
@@ -36,10 +41,13 @@ namespace RoleAndManagement.Controllers
         [AllowAnonymous] //允许匿名
         public async Task<IActionResult> Index()
         {
-            if(User.IsInRole(Roles.Employer))
+            var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var currentUserRole = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if(currentUserRole == "Employer" || currentUserRole == "Admin")
             {
                 var allJobPostings = await _repository.GetAllAsync();
-                var userId = _userManager.GetUserId(User);
+                var userId = currentUserId;
                 var filteredJoboPostings = allJobPostings.Where(jp => jp.UserId == userId);
                 return View(filteredJoboPostings);
             }
@@ -56,7 +64,10 @@ namespace RoleAndManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(JobPostingViewModel jobPostingVm)
         {
-            if(ModelState.IsValid)
+            var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var currentUserName = User.FindFirst(ClaimTypes.Name)?.Value;
+            
+            if(currentUserName != null)
             {
                 // jobPosting.UsedId = _userManager.GetUserId(user);
                 // await _repository.AddAsync(jobPosting);
@@ -66,7 +77,7 @@ namespace RoleAndManagement.Controllers
                     Description = jobPostingVm.Description,
                     Company = jobPostingVm.Company,
                     Location = jobPostingVm.Location,
-                    UserId = _userManager.GetUserId(User)
+                    UserId = currentUserId
                 };
 
                 await _repository.AddAsync(jobPosting);
@@ -74,6 +85,32 @@ namespace RoleAndManagement.Controllers
             }
             
             return View(jobPostingVm);
+        }
+
+        [HttpDelete]
+        [Authorize(Roles = "Admin,Employer")]
+        [Route("MongoDB/DeleteEasy/{id}")]
+        public async Task<IActionResult> DeleteEasy(int id)
+        {
+            var currentUserRole = User.FindFirst(ClaimTypes.Role)?.Value;
+            var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var jobPosting = await _repository.GetByIdAsync(id);
+
+            if(jobPosting == null)
+            {
+                return NotFound();
+            }
+
+            if(currentUserRole != "Admin" && jobPosting.UserId != currentUserId)
+            {
+                return Forbid();
+            }
+
+            await _repository.DeleteAsync(id);
+
+
+            return Ok();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

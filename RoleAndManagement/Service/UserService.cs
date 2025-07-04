@@ -3,20 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Driver;
+using Microsoft.Extensions.Options;
+using System.Security.Cryptography;
+using System.Text;
+using MongoDB.Bson;
 using RoleAndManagement.Models;
 using RoleAndManagement.Data;
+using RoleAndManagement.Service;
 
 namespace RoleAndManagement.Service
 {
-    public class UserService : IUserService
+    public class UserService
     {
         private readonly IMongoCollection<User> _users;
 
-        public UserService(MongoDBContext _context)
+        public UserService(IMongoDBContext _context)
         {
             var client = new MongoClient(_context.ConnectionString);
             var database = client.GetDatabase(_context.DatabaseName);
-            _users = database.GetCollection<User>(_context.UsersCollectionName);
+            _users = database.GetCollection<User>(_context.AuthicationCollection);
+        }
+
+        public async Task<User> GetById(string id)
+        {
+            return await _users.Find(user => user.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task<User> GetByUsername(string username)

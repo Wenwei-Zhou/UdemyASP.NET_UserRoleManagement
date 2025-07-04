@@ -49,31 +49,35 @@ namespace RoleAndManagement.Controllers
             {
                 // 创建认证Cookie
                 var user = await _userService.GetByUsername(model.Username);
-                if (user != null && _userService.VerifyPassword(model.password, user.PasswordHash))
+                if (user != null && _userService.VerifyPassword(model.Password, user.PasswordHash))
                 {
                     var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.Name, user.Username),
-                        new Claim(ClaimTypes.NameIdentifier, user.Id)
+                        new Claim(ClaimTypes.NameIdentifier, user.Id),
+                        new Claim(ClaimTypes.Email, user.Email),
+                        new Claim(ClaimTypes.Role, user.Role)
                     };
 
-                    // 添加角色声明
-                    foreach (var role in user.Roles)
-                    {
-                        claims.Add(new Claim(ClaimTypes.Role, role));
-                    }
+                    // 添加角色声明，如果user.Roles是list就用foreach loop
+                    // foreach (var role in user.Roles)
+                    // {
+                    //     claims.Add(new Claim(ClaimTypes.Role, role));
+                    // }
 
-                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticatioinDefaults.AuthenticationScheme);
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                    var authProperties = new AuthticationProperties
+                    var principal = new ClaimsPrincipal(claimsIdentity);
+
+                    var authProperties = new AuthenticationProperties
                     {
                         IsPersistent = model.RememberMe,
-                        ExpiresUtc = DateTimeOffest.UtcNow.AddDays(7)
+                        ExpiresUtc = DateTimeOffset.UtcNow.AddDays(7)
                     };
 
                     await HttpContext.SignInAsync(
-                        CookieAuthenticatioinDefaults.AuthenticationScheme,
-                        new ClaimsPrincipal(claimsIdentity),
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        principal,
                         authProperties
                     );
 
@@ -88,7 +92,7 @@ namespace RoleAndManagement.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "User name or Password not correct")
+                    ModelState.AddModelError(string.Empty, "User name or Password not correct");
                     return View(model);
                 }
             }
@@ -116,24 +120,28 @@ namespace RoleAndManagement.Controllers
 
                 if (await _userService.GetByUsername(model.Username) != null)
                 {
-                    ModelState.AddModelError(string.Empty, "User name alreday exist")
+                    ModelState.AddModelError(string.Empty, "User name alreday exist");
                     return View(model);
                 }
 
                 if (await _userService.GetByUsername(model.Email) != null)
                 {
-                    ModelState.AddModelError(string.Empty, "Email alreday exist")
+                    ModelState.AddModelError(string.Empty, "Email alreday exist");
                     return View(model);
                 }
+
+                // string[] roleArray = new[] { "User" };
 
                 var user = new User
                 {
                     Username = model.Username,
                     Email = model.Email,
-                    Roles = new[] { "User" }
-                }
+                    // Role = roleArray.ToList()
+                    Role = model.Role
+                };
 
-                bool result = _userService.Create(user, model.Password);
+                bool result = await _userService.Create(user, model.Password);
+
                 if (result)
                 {
                     TempData["SuccessMessage"] = " Create Account Successful";
@@ -151,7 +159,7 @@ namespace RoleAndManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticatioinDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
         }
 
@@ -161,10 +169,5 @@ namespace RoleAndManagement.Controllers
             return View();
         }
 
-        // [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        // public IActionResult Error()
-        // {
-        //     return View("Error!");
-        // }
     }
 }

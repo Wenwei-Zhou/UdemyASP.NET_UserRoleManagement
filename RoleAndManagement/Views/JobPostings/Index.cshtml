@@ -3,12 +3,17 @@
 
 @model IEnumerable<RoleAndManagement.Models.JobPosting>
 @using RoleAndManagement.Contants
+@using RoleAndManagement.Models
+@using System.Security.Claims
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+
 
 <h1 class="text-center m-5">All Jobs</h1>
 
 <div class="list-group">
-    @foreach(var jobPosting in Model)
+    @foreach(var jobPosting in Model) //Model = @model, list all the jobPosting in the foreach loop
     {
+        var currentUserRole = User.FindFirst(ClaimTypes.Role)?.Value;
         <div class="list-group-item" id="job-posting-@jobPosting.Id">
             <h3>@jobPosting.Title</h3>
             <p>@jobPosting.Description</p>
@@ -16,18 +21,49 @@
             <p><strong>Location:</strong> @jobPosting.Location</p>
             <p><strong>Posted Date:</strong> @jobPosting.PostedDate.ToShortDateString()</p>
 
-            @if(User.IsInRole(Roles.Admin)||User.IsInRole(Roles.Employer))
+            @if(currentUserRole == "Admin" || currentUserRole == "Employer")
+            {
+                <a href="#" onclick="deleteJob(@jobPosting.Id)">Delete</a>
+            }
+
+            @* @if(User.IsInRole(Roles.Admin)||User.IsInRole(Roles.Employer))
             {
                 <div>
                     <button class="btn btn-sm btn-danger" onclick="deleteJobPosting(@jobPosting.Id)">Delete</button>
                 </div>
-            }
+            } *@
 
             @* <a asp-action="DeleteEasy" asp-route-id="@jobPosting.Id">Delete</a> *@
         </div>
     }
 </div>
 
+@section Scripts{
+    <script>
+        const requestVerificationToken = '@Antiforgery.GetAndStoreTokens(Context).RequestToken';
+        function deleteJob(id) {
+            fetch(`/MongoDB/DeleteEasy/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'RequestVerificationToken': requestVerificationToken
+                } // 安全校验：防止别人伪造你登录后的请求（CSRF)。从 Razor 后端获取 RequestVerificationToken，加到请求头中，以便服务器能验证你不是伪造请求
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("Deleted successfully");
+                    location.reload();
+                }
+                else
+                {
+                    alert("Delete failed");
+                }
+            });
+        }
+    </script>
+}
+
+
+<!-- 
 @section Scripts {
     <script>
         function deleteJobPosting(id)
@@ -52,4 +88,4 @@
             }
         }
     </script>
-}
+} -->

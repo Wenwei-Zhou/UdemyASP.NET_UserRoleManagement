@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "2OW66Gj68oc=",
+  "dgSpecHash": "XQlRoXSXUG8=",
   "success": true,
-  "projectFilePath": "/Users/wenweizhou/Desktop/UdemyASP.NET_UserRoleManagement/RoleAndManagement/RoleAndManagement.csproj",
+  "projectFilePath": "/Users/wenweizhou/Documents/UdemyASP.NET_UserRoleManagement/RoleAndManagement/RoleAndManagement.csproj",
   "expectedPackageFiles": [
     "/Users/wenweizhou/.nuget/packages/azure.core/1.38.0/azure.core.1.38.0.nupkg.sha512",
     "/Users/wenweizhou/.nuget/packages/azure.identity/1.11.4/azure.identity.1.11.4.nupkg.sha512",
@@ -176,7 +176,10 @@
     "/Users/wenweizhou/.nuget/packages/system.threading.channels/7.0.0/system.threading.channels.7.0.0.nupkg.sha512",
     "/Users/wenweizhou/.nuget/packages/system.threading.tasks.dataflow/8.0.0/system.threading.tasks.dataflow.8.0.0.nupkg.sha512",
     "/Users/wenweizhou/.nuget/packages/system.threading.tasks.extensions/4.5.4/system.threading.tasks.extensions.4.5.4.nupkg.sha512",
-    "/Users/wenweizhou/.nuget/packages/zstdsharp.port/0.7.3/zstdsharp.port.0.7.3.nupkg.sha512"
+    "/Users/wenweizhou/.nuget/packages/zstdsharp.port/0.7.3/zstdsharp.port.0.7.3.nupkg.sha512",
+    "/Users/wenweizhou/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.17/microsoft.aspnetcore.app.ref.8.0.17.nupkg.sha512",
+    "/Users/wenweizhou/.nuget/packages/microsoft.netcore.app.host.osx-arm64/8.0.17/microsoft.netcore.app.host.osx-arm64.8.0.17.nupkg.sha512",
+    "/Users/wenweizhou/.nuget/packages/microsoft.netcore.app.ref/8.0.17/microsoft.netcore.app.ref.8.0.17.nupkg.sha512"
   ],
   "logs": []
 }

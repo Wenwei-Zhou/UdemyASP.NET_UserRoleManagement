@@ -5,11 +5,19 @@ using System.Threading.Tasks;
 
 namespace RoleAndManagement.Data
 {
-    public class MongoDBContext
+    public interface IMongoDBContext
     {
-        public string ConnectionString { get; set; } = null;
-        public string DatabaseName { get; set; } = null;
-        public string JobCollection { get; set; } = null;
-        public string AuthicationCollection { get; set; } = null;
+        string ConnectionString { get; set; }
+        string DatabaseName { get; set; }
+        string JobCollection { get; set; }
+        string AuthicationCollection { get; set; }
+    }
+
+    public class MongoDBContext : IMongoDBContext
+    {
+        public string ConnectionString { get; set; }
+        public string DatabaseName { get; set; }
+        public string JobCollection { get; set; }
+        public string AuthicationCollection { get; set; }
     }
 }

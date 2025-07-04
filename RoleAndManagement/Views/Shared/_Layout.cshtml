@@ -34,7 +34,7 @@
                             <a class="nav-link @(currentController == "JobPostings" && currentAction == "Create" ? "active" : "")"  asp-area="" asp-controller="JobPostings" asp-action="Create">PostJob</a>
                         </li>
 
-                        @if(User.Identity.IsAuthenticated)
+                        <!-- @if(User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
                                 <a class="nav-link"  asp-area="Identity" asp-page="/Account/Logout">Logout</a>
@@ -47,6 +47,22 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link @(currentPage == "/Account/Register" ? "active" : "")"  asp-area="Identity" asp-page="/Account/Register">Register</a>
+                            </li>
+                        } -->
+
+                        @if(User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link"  asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                            </li>
+                            <li>
+                                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
                             </li>
                         }
                     </ul>

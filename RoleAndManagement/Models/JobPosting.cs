@@ -30,6 +30,8 @@ namespace RoleAndManagement.Models
         [Required]
         public string Title { get; set; } = string.Empty;
         [Required]
+        public string Classification { get; set; } = string.Empty;
+        [Required]
         public string Description { get; set; } = string.Empty;
         [Required]
         public string Company { get; set; } = string.Empty;
